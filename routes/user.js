@@ -19,6 +19,16 @@ router.get("/:id", async (req, res) => {
     
 })
 
+// POST Login of a user
+router.post("/login", async (req, res) => {
+    const user = await User.findOne({"auth.username":req.body.username}, {auth:1})
+    if (user){
+        if (user.auth.password === req.body.password) return res.send("login success")
+        else return res.status(403).send("Invalid credentials")
+    }
+    else return res.status(403).send("Invalid credentials")
+})
+
 // POST create or add a new user to the database
 router.post("/", async (req, res) => {
     var user = new User(req.body);
